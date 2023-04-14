@@ -1,0 +1,57 @@
+﻿@page "/analysis/update/{id}"
+@using System.Linq
+@using System.Threading.Tasks
+@using LabMobile.Models
+@using LabMobile.Services
+@inject NavigationManager NavigationManager;
+
+@inject IAnalysisService AnalysisService
+
+<h1>Update Analysis</h1>
+
+@if (analysis != null)
+{
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" @bind="analysis.Name" />
+    </div>
+    <div class="form-group">
+        <label for="code">Code</label>
+        <input type="text" class="form-control" id="code" @bind="analysis.Code" />
+    </div>
+    <div class="form-group">
+        <label for="price">Price</label>
+        <input type="number" class="form-control" id="price" @bind="analysis.Price" />
+    </div>
+    <div class="form-group">
+        <label for="method">Method</label>
+        <input type="text" class="form-control" id="method" @bind="analysis.Method" />
+    </div>
+    <div class="form-group">
+        <label for="analysisValues">Analysis Values</label>
+        <input type="text" class="form-control" id="analysisValues" @bind="analysis.AnalysisValues" />
+    </div>
+    <button type="submit" class="btn btn-primary" @onclick="UpdateAnalysis">Update</button>
+}
+
+@code {
+    private Analysis analysis;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(Id))
+        {
+            Guid analysisId = Guid.Parse(Id);
+            analysis = await AnalysisService.GetAnalysisAsync(analysisId);
+        }
+    }
+
+    private async Task UpdateAnalysis()
+    {
+        await AnalysisService.UpdateAnalysisAsync(analysis.Id, analysis);
+        NavigationManager.NavigateTo("/analysis");
+    }
+}

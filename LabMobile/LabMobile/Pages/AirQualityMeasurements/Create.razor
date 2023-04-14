@@ -1,0 +1,58 @@
+﻿@page "/AirQualityMeasurements/create"
+@using System.Linq
+@using System.Threading.Tasks
+@using LabMobile.Models
+@using LabMobile.Services
+@inject NavigationManager NavigationManager;
+
+<h3>Create a new Air Quality Measurement</h3>
+
+<div class="form-group">
+    <label for="receptionPointId">Reception Point Id:</label>
+    <input type="text" class="form-control" id="receptionPointId" @bind="@AirQualityMeasurement.ReceptionPointId" />
+</div>
+<div class="form-group">
+    <label for="date">Date:</label>
+    <input type="datetime-local" class="form-control" id="date" @bind="@AirQualityMeasurement.Date" />
+</div>
+<div class="form-group">
+    <label for="temperature">Temperature:</label>
+    <input type="number" class="form-control" id="temperature" @bind="@AirQualityMeasurement.Temperature" />
+</div>
+<div class="form-group">
+    <label for="pressure">Pressure:</label>
+    <input type="number" class="form-control" id="pressure" @bind="@AirQualityMeasurement.Pressure" />
+</div>
+<div class="form-group">
+    <label for="humidity">Humidity:</label>
+    <input type="number" class="form-control" id="humidity" @bind="@AirQualityMeasurement.Humidity" />
+</div>
+<div class="form-group">
+    <label for="gas">Gas:</label>
+    <input type="number" class="form-control" id="gas" @bind="@AirQualityMeasurement.Gas" />
+</div>
+<div class="form-group">
+    <label for="iaq">IAQ:</label>
+    <input type="number" class="form-control" id="iaq" @bind="@AirQualityMeasurement.Iaq" />
+</div>
+<div class="form-group">
+    <label for="isNormal">Is Normal:</label>
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" id="isNormal" @onchange="@((args) => AirQualityMeasurement.IsNormal = (bool)args.Value)" />
+        <label class="custom-control-label" for="isNormal"></label>
+    </div>
+</div>
+<button type="submit" class="btn btn-primary" @onclick="@CreateAirQualityMeasurementAsync">Create</button>
+
+@code {
+    private AirQualityMeasurement AirQualityMeasurement { get; set; } = new AirQualityMeasurement();
+
+    [Inject]
+    public IAirQualityMeasurementService AirQualityMeasurementService { get; set; }
+
+    private async Task CreateAirQualityMeasurementAsync()
+    {
+        await AirQualityMeasurementService.CreateAirQualityMeasurementAsync(AirQualityMeasurement);
+        NavigationManager.NavigateTo("/AirQualityMeasurements/AirQualityMeasurements");
+    }
+}

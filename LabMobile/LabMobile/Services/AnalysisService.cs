@@ -1,0 +1,68 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using LabMobile.Models;
+
+namespace LabMobile.Services
+{
+    public interface IAnalysisService
+    {
+        Task<List<Analysis>> GetAnalysesAsync();
+        Task<Analysis> GetAnalysisAsync(Guid id);
+        Task<Analysis> CreateAnalysisAsync(Analysis analysis);
+        Task UpdateAnalysisAsync(Guid id, Analysis analysis);
+        Task DeleteAnalysisAsync(Guid id);
+    }
+
+
+    public class AnalysisService : IAnalysisService
+    {
+        private readonly HttpClient _httpClient;
+        private const string BaseUrl = "https://labapi123.azurewebsites.net/api/Analyses";
+
+        public AnalysisService()
+        {
+            _httpClient = new HttpClient();
+        }
+
+        public async Task<List<Analysis>> GetAnalysesAsync()
+        {
+            var response = await _httpClient.GetAsync(BaseUrl);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<List<Analysis>>();
+        }
+
+        public async Task<Analysis> GetAnalysisAsync(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"{BaseUrl}/{id}");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<Analysis>();
+        }
+
+        public async Task<Analysis> CreateAnalysisAsync(Analysis analysis)
+        {
+            var response = await _httpClient.PostAsJsonAsync(BaseUrl, analysis);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<Analysis>();
+        }
+
+        public async Task UpdateAnalysisAsync(Guid id, Analysis analysis)
+        {
+            var json = JsonSerializer.Serialize(analysis);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            await _httpClient.PutAsync($"{BaseUrl}/{id}", content);
+        }
+
+        public async Task DeleteAnalysisAsync(Guid id)
+        {
+            var response = await _httpClient.DeleteAsync($"{BaseUrl}/{id}");
+            response.EnsureSuccessStatusCode();
+        }
+    }
+
+}

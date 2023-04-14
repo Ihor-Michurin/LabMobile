@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using LabMobile.Data;
+using LabMobile.Services;
 
 namespace LabMobile;
 
@@ -21,8 +22,12 @@ public static class MauiProgram
 		builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
 #endif
+        builder.Services.AddSingleton<IAirQualityMeasurementService, AirQualityMeasurementService>();
+        builder.Services.AddSingleton<IAnalysisService, AnalysisService>();
+        builder.Services.AddSingleton<IAnalysisReceptionPointService, AnalysisReceptionPointService>();
+        builder.Services.AddSingleton<ILaboratoryAssistantService, LaboratoryAssistantService>();
 
-		builder.Services.AddSingleton<WeatherForecastService>();
+        builder.Services.AddSingleton<WeatherForecastService>();
 
 		return builder.Build();
 	}

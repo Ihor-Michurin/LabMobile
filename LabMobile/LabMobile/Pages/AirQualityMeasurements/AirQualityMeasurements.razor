@@ -1,0 +1,94 @@
+﻿@page "/AirQualityMeasurements/AirQualityMeasurements"
+@using System.Linq
+@using System.Threading.Tasks
+@using LabMobile.Models
+@using LabMobile.Services
+@inject NavigationManager NavigationManager;
+
+<h1>Air Quality Measurements</h1>
+
+@if (measurements == null)
+{
+    <p>Loading...</p>
+}
+else if (!measurements.Any())
+{
+    <p>No data to display</p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-success" @onclick="() => CreateMeasurement()">Create New</button>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Reception Point ID</th>
+                <th>Date</th>
+                <th>Temperature</th>
+                <th>Pressure</th>
+                <th>Humidity</th>
+                <th>Gas</th>
+                <th>IAQ</th>
+                <th>Is Normal</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var measurement in measurements)
+            {
+                <tr>
+                    <td>@measurement.Id</td>
+                    <td>@measurement.ReceptionPointId</td>
+                    <td>@measurement.Date</td>
+                    <td>@measurement.Temperature</td>
+                    <td>@measurement.Pressure</td>
+                    <td>@measurement.Humidity</td>
+                    <td>@measurement.Gas</td>
+                    <td>@measurement.Iaq</td>
+                    <td>@measurement.IsNormal</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => EditMeasurement(measurement)">Edit</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="() => DeleteMeasurement(measurement)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    
+}
+
+@code {
+    private List<AirQualityMeasurement> measurements;
+
+    [Inject]
+    private IAirQualityMeasurementService measurementService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        measurements = await measurementService.GetAirQualityMeasurementsAsync();
+    }
+
+    private void EditMeasurement(AirQualityMeasurement measurement)
+    {
+        NavigationManager.NavigateTo($"/airqualitymeasurements/update/{measurement.Id}");
+    }
+
+    private void DeleteMeasurement(AirQualityMeasurement measurement)
+    {
+        measurementService.DeleteAirQualityMeasurementAsync(measurement.Id);
+        measurements.Remove(measurement);
+    }
+
+    private void CreateMeasurement()
+    {
+        NavigationManager.NavigateTo("/AirQualityMeasurements/create");
+    }
+}

@@ -1,0 +1,71 @@
+﻿@page "/analysisreceptionpointss"
+@using LabMobile.Models
+@using LabMobile.Services
+@inject IAnalysisReceptionPointService AnalysisReceptionPointService
+@inject NavigationManager NavigationManager;
+<h3>Analysis Reception Points</h3>
+
+<button class="btn btn-primary" @onclick="@CreateNewAnalysisReceptionPoint">Create new Analysis Reception Point</button>
+
+@if (AnalysisReceptionPoints == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (AnalysisReceptionPoints.Count == 0)
+{
+
+    <p><em>No Analysis Reception Points found.</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Contact Information</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var analysisReceptionPoint in AnalysisReceptionPoints)
+            {
+                <tr>
+                    <td>@analysisReceptionPoint.Name</td>
+                    <td>@analysisReceptionPoint.Address</td>
+                    <td>@analysisReceptionPoint.ContactInformation</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" @onclick="@(() => EditAnalysisReceptionPoint(analysisReceptionPoint.Id))">Edit</button>
+                        <button class="btn btn-sm btn-danger" @onclick="@(() => DeleteAnalysisReceptionPoint(analysisReceptionPoint.Id))">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private List<AnalysisReceptionPoint> AnalysisReceptionPoints;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AnalysisReceptionPoints = await AnalysisReceptionPointService.GetAllAnalysisReceptionPointsAsync();
+    }
+
+    private void CreateNewAnalysisReceptionPoint()
+    {
+        NavigationManager.NavigateTo("/analysisreceptionpoints/create");
+    }
+
+    private void EditAnalysisReceptionPoint(Guid id)
+    {
+        NavigationManager.NavigateTo($"/analysisreceptionpoints/edit/{id}");
+    }
+
+    private async Task DeleteAnalysisReceptionPoint(Guid id)
+    {
+        await AnalysisReceptionPointService.DeleteAnalysisReceptionPointAsync(id);
+        AnalysisReceptionPoints = await AnalysisReceptionPointService.GetAllAnalysisReceptionPointsAsync();
+    }
+}

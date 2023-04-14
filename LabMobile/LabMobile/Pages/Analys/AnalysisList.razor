@@ -1,0 +1,77 @@
+﻿@page "/analysis"
+@using System.Linq
+@using System.Threading.Tasks
+@using LabMobile.Models
+@using LabMobile.Services
+@inject NavigationManager NavigationManager;
+
+<h1>Analysis List</h1>
+
+<button @onclick="CreateAnalysis">Create Analysis</button>
+
+@if (Analyses == null)
+{
+    <p>Loading analyses...</p>
+}
+else if (Analyses.Count == 0)
+{
+    <p>No analyses found.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Price</th>
+                <th>Method</th>
+                <th>Values</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var analysis in Analyses)
+            {
+                <tr>
+                    <td>@analysis.Name</td>
+                    <td>@analysis.Code</td>
+                    <td>@analysis.Price</td>
+                    <td>@analysis.Method</td>
+                    <td>@analysis.AnalysisValues</td>
+                    <td>
+                        <button @onclick="() => EditAnalysis(analysis)">Edit</button>
+                        <button @onclick="() => DeleteAnalysis(analysis)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    private List<Analysis> Analyses;
+
+    [Inject]
+    private IAnalysisService AnalysisService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Analyses = await AnalysisService.GetAnalysesAsync();
+    }
+
+    private void CreateAnalysis()
+    {
+        NavigationManager.NavigateTo("/analysis/create");
+    }
+
+    private void EditAnalysis(Analysis analysis)
+    {
+        NavigationManager.NavigateTo($"/analysis/update/{analysis.Id}");
+    }
+
+    private async void DeleteAnalysis(Analysis analysis)
+    {
+        await AnalysisService.DeleteAnalysisAsync(analysis.Id);
+        Analyses.Remove(analysis);
+    }
+}

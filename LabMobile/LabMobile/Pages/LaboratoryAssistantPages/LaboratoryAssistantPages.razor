@@ -1,0 +1,87 @@
+﻿@page "/laboratoryassistants"
+
+@using LabMobile.Models
+@using LabMobile.Services
+@inject NavigationManager NavigationManager;
+
+@inject ILaboratoryAssistantService AssistantService
+
+<h1>Laboratory Assistants</h1>
+
+@if (Assistants is null)
+{
+    <p>Loading...</p>
+}
+else if (Assistants.Count == 0)
+{
+    <p>No assistants found.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Contact Information</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var assistant in Assistants)
+            {
+                <tr>
+                    <td>@assistant.Name</td>
+                    <td>@assistant.DateOfBirth.ToShortDateString()</td>
+                    <td>@assistant.Gender</td>
+                    <td>@assistant.ContactInformation</td>
+                    <td>
+                        <button @onclick="@(() => EditAssistant(assistant.Id))">Edit</button>
+                        <button @onclick="@(() => DeleteAssistant(assistant.Id))">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div>
+    <button @onclick="@(() => CreateAssistant())">Create Assistant</button>
+</div>
+
+@code {
+    private List<LaboratoryAssistant> Assistants;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Assistants = await AssistantService.GetAllAsync();
+    }
+
+    private async Task CreateAssistant()
+    {
+        // Navigate to create assistant page
+        NavigationManager.NavigateTo("/laboratory-assistants/create");
+    }
+
+    private async Task EditAssistant(Guid id)
+    {
+        // Navigate to edit assistant page
+        NavigationManager.NavigateTo($"/laboratory-assistants/edit/{id}");
+    }
+
+    private async Task DeleteAssistant(Guid id)
+    {
+        // Confirm deletion with user
+
+            try
+            {
+                await AssistantService.DeleteAsync(id);
+                Assistants.Remove(Assistants.Single(a => a.Id == id));
+            }
+            catch (Exception ex)
+            {
+                // Handle error
+            }
+    }
+}

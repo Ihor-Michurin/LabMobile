@@ -1,0 +1,54 @@
+﻿@page "/analysis/create"
+@using System.Linq
+@using System.Threading.Tasks
+@using LabMobile.Models
+@using LabMobile.Services
+@inject NavigationManager NavigationManager;
+@inject IAnalysisService AnalysisService
+
+<h1>Create Analysis</h1>
+
+@if (showSuccessMessage)
+{
+    <div class="alert alert-success" role="alert">
+        Analysis created successfully!
+    </div>
+}
+
+<div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" @bind-value="@newAnalysis.Name">
+</div>
+
+<div class="form-group">
+    <label for="code">Code</label>
+    <input type="text" class="form-control" id="code" @bind-value="@newAnalysis.Code">
+</div>
+
+<div class="form-group">
+    <label for="price">Price</label>
+    <input type="number" class="form-control" id="price" @bind-value="@newAnalysis.Price">
+</div>
+
+<div class="form-group">
+    <label for="method">Method</label>
+    <input type="text" class="form-control" id="method" @bind-value="@newAnalysis.Method">
+</div>
+
+<div class="form-group">
+    <label for="analysisValues">Analysis Values</label>
+    <textarea class="form-control" id="analysisValues" @bind="@newAnalysis.AnalysisValues"></textarea>
+</div>
+
+<button type="submit" class="btn btn-primary" @onclick="CreateAnalysis">Create Analysis</button>
+
+@code {
+    Analysis newAnalysis = new Analysis();
+    bool showSuccessMessage = false;
+
+    async Task CreateAnalysis()
+    {
+        await AnalysisService.CreateAnalysisAsync(newAnalysis);
+        showSuccessMessage = true;
+    }
+}
