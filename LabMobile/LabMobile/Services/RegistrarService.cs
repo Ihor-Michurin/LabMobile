@@ -44,6 +44,8 @@ namespace LabMobile.Services
 
         public async Task CreateAsync(Registrar assistant)
         {
+            assistant.DateOfBirth = DateTime.SpecifyKind(assistant.DateOfBirth, DateTimeKind.Utc);
+
             var json = JsonConvert.SerializeObject(assistant);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -57,6 +59,8 @@ namespace LabMobile.Services
 
         public async Task UpdateAsync(Guid id, Registrar assistant)
         {
+            assistant.DateOfBirth = DateTime.SpecifyKind(assistant.DateOfBirth, DateTimeKind.Utc);
+
             var response = await _httpClient.PutAsync($"https://labapi123.azurewebsites.net/api/Registrars/{id}", new StringContent(JsonConvert.SerializeObject(assistant), Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
         }
