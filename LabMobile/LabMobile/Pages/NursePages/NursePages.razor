@@ -1,0 +1,76 @@
+﻿@page "/nurses"
+@using LabMobile.Models
+@using LabMobile.Services
+@inject INurseService NurseService
+@inject NavigationManager NavigationManager;
+
+<h3>Nurses</h3>
+
+@if (nurses == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (nurses.Count == 0)
+{
+    <p><em>No nurses found.</em></p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Contact Information</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var nurse in nurses)
+            {
+                <tr>
+                    <td>@nurse.Name</td>
+                    <td>@nurse.DateOfBirth.ToShortDateString()</td>
+                    <td>@nurse.Gender</td>
+                    <td>@nurse.ContactInformation</td>
+                    <td>
+                        <button @onclick="@(() => EditAssistant(nurse.Id))">Edit</button>
+                        <button @onclick="@(() => DeleteAssistant(nurse.Id))">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a href="/nurse/create">Create</a>
+
+@code {
+    List<Nurse> nurses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        nurses = await NurseService.GetAllAsync();
+    }
+
+    private async Task EditAssistant(Guid id)
+    {
+        // Navigate to edit assistant page
+        NavigationManager.NavigateTo($"/nurse/update/{id}");
+    }
+
+    private async Task DeleteAssistant(Guid id)
+    {
+        // Confirm deletion with user
+
+        try
+        {
+            await NurseService.DeleteAsync(id);
+        }
+        catch (Exception ex)
+        {
+            // Handle error
+        }
+    }
+}

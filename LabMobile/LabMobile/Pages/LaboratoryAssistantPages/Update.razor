@@ -1,0 +1,75 @@
+﻿@page "/laboratoryassistants/update/{assistantId}"
+@using LabMobile.Models
+@using LabMobile.Services
+@inject ILaboratoryAssistantService AssistantService
+@inject NavigationManager NavigationManager
+
+<h1>Update Laboratory Assistant</h1>
+
+@if (UpdatingAssistant is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <form @onsubmit="@HandleSubmit">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" @bind="@UpdatingAssistant.Name" required>
+        </div>
+        <div>
+            <label for="dateOfBirth">Date of Birth:</label>
+            <input type="date" id="dateOfBirth" @bind="@UpdatingAssistant.DateOfBirth" required>
+        </div>
+        <div>
+            <label for="gender">Gender:</label>
+            <input type="text" id="gender" @bind="@UpdatingAssistant.Gender" required>
+        </div>
+        <div>
+            <label for="contactInformation">Contact Information:</label>
+            <textarea id="contactInformation" @bind="@UpdatingAssistant.ContactInformation"></textarea>
+        </div>
+        <div>
+            <button type="submit">Update</button>
+            <button type="button" @onclick="@CancelUpdate">Cancel</button>
+        </div>
+    </form>
+}
+
+@code {
+    private LaboratoryAssistant UpdatingAssistant;
+
+    [Parameter]
+    public string AssistantId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Guid assistantGuid = Guid.Parse(AssistantId);
+            UpdatingAssistant = await AssistantService.GetAsync(assistantGuid);
+        }
+        catch (Exception ex)
+        {
+            // Handle error
+        }
+    }
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            await AssistantService.UpdateAsync(Guid.Parse(AssistantId), UpdatingAssistant);
+            NavigationManager.NavigateTo("/laboratoryassistants");
+        }
+        catch (Exception ex)
+        {
+            // Handle error
+        }
+    }
+
+    private void CancelUpdate()
+    {
+        NavigationManager.NavigateTo("/laboratoryassistants");
+    }
+}

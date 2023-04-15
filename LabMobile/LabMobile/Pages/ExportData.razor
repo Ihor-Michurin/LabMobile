@@ -1,0 +1,32 @@
+﻿@page "/ExportData"
+@using LabMobile.Services;
+@inject IDatabaseService DatabaseService;
+<h3>ExportData</h3>
+
+@if (_database == null)
+{
+    <p>Loading....</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+            <td>@_database</td>
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private string _database;
+    protected override async Task OnInitializedAsync()
+    {
+        _database = await DatabaseService.ExportData();
+    }
+}

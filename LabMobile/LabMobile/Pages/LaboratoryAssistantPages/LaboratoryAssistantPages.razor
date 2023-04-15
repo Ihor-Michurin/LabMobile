@@ -61,13 +61,13 @@ else
     private async Task CreateAssistant()
     {
         // Navigate to create assistant page
-        NavigationManager.NavigateTo("/laboratory-assistants/create");
+        NavigationManager.NavigateTo("/laboratoryassistants/create");
     }
 
     private async Task EditAssistant(Guid id)
     {
         // Navigate to edit assistant page
-        NavigationManager.NavigateTo($"/laboratory-assistants/edit/{id}");
+        NavigationManager.NavigateTo($"/laboratoryassistants/update/{id}");
     }
 
     private async Task DeleteAssistant(Guid id)

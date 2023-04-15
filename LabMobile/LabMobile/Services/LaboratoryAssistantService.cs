@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 using LabMobile.Models;
@@ -13,7 +14,7 @@ namespace LabMobile.Services
     {
         Task<LaboratoryAssistant> GetAsync(Guid id);
         Task<List<LaboratoryAssistant>> GetAllAsync();
-        Task<Guid> CreateAsync(LaboratoryAssistant assistant);
+        Task CreateAsync(LaboratoryAssistant assistant);
         Task UpdateAsync(Guid id, LaboratoryAssistant assistant);
         Task DeleteAsync(Guid id);
     }
@@ -46,14 +47,18 @@ namespace LabMobile.Services
             return JsonConvert.DeserializeObject<List<LaboratoryAssistant>>(content);
         }
 
-        public async Task<Guid> CreateAsync(LaboratoryAssistant assistant)
+        public async Task CreateAsync(LaboratoryAssistant assistant)
         {
-            var response = await _httpClient.PostAsync("https://labapi123.azurewebsites.net/api/LaboratoryAssistants", new StringContent(JsonConvert.SerializeObject(assistant), Encoding.UTF8, "application/json"));
-            response.EnsureSuccessStatusCode();
+            var json = JsonConvert.SerializeObject(assistant);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<Guid>(content);
+            var response = await _httpClient.PostAsync("https://labapi123.azurewebsites.net/api/LaboratoryAssistants", content);
+
+            response.EnsureSuccessStatusCode();
+            var responseContent = await response.Content.ReadAsStringAsync();
         }
+
+
 
         public async Task UpdateAsync(Guid id, LaboratoryAssistant assistant)
         {

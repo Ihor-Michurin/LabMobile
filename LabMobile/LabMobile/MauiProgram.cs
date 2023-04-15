@@ -26,6 +26,10 @@ public static class MauiProgram
         builder.Services.AddSingleton<IAnalysisService, AnalysisService>();
         builder.Services.AddSingleton<IAnalysisReceptionPointService, AnalysisReceptionPointService>();
         builder.Services.AddSingleton<ILaboratoryAssistantService, LaboratoryAssistantService>();
+        builder.Services.AddSingleton<INurseService, NurseService>();
+        builder.Services.AddSingleton<IPatientService, PatientService>();
+        builder.Services.AddSingleton<IRegistrarService, RegistrarService>();
+        builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
 
         builder.Services.AddSingleton<WeatherForecastService>();
 

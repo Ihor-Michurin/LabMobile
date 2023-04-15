@@ -1,0 +1,24 @@
+﻿@page "/DeleteData"
+@using LabMobile.Services;
+@inject IDatabaseService DatabaseService;
+<h3>DeleteData</h3>
+
+<button @onclick="DeleteDataInDatabase" type="submit" class="mt-2 btn btn-primary">Submit</button>
+
+@code {
+    private async void DeleteDataInDatabase()
+    {
+        var response = await DatabaseService.DeleteData();
+
+        if (response)
+        {
+            this.StateHasChanged();
+
+            await App.Current.MainPage.DisplayAlert("Database Data Deleted", "Database Data Deleted Successfully", "OK");
+        }
+        else
+        {
+            await App.Current.MainPage.DisplayAlert("Oops", "Ops", "OK");
+        }
+    }
+}

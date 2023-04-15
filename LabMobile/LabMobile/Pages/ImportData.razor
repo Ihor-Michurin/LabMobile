@@ -1,0 +1,34 @@
+﻿@page "/ImportData"
+@using LabMobile.Services;
+@inject IDatabaseService DatabaseService;
+<h3>ImportData</h3>
+
+<div class="form-group">
+    <label>Import Data</label>
+    <input @bind="data" class="form-control" placeholder="data">
+</div>
+
+<button @onclick="ImportDataToDatabase" type="submit" class="mt-2 btn btn-primary">Submit</button>
+
+@code {
+    private string data;
+    protected override async Task OnInitializedAsync(){}
+
+
+    private async void ImportDataToDatabase()
+    {
+        var response = await DatabaseService.ImportData(data);
+
+        if (response)
+        {
+            data = string.Empty;
+            this.StateHasChanged();
+
+            await App.Current.MainPage.DisplayAlert("Record Added", "Record Added Successfully", "OK");
+        }
+        else
+        {
+            await App.Current.MainPage.DisplayAlert("Oops", "Ops", "OK");
+        }
+    }
+}

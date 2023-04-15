@@ -1,0 +1,52 @@
+﻿@page "/registrar/create"
+@using LabMobile.Models
+@using LabMobile.Services
+@inject IRegistrarService RegistrarService
+@inject NavigationManager NavigationManager
+
+<h1>Create Registrar</h1>
+
+@if (CreatingAssistant is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <form @onsubmit="@HandleSubmit">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" @bind="@CreatingAssistant.Name" required>
+        </div>
+        <div>
+            <label for="dateOfBirth">Date of Birth:</label>
+            <input type="date" id="dateOfBirth" @bind="@CreatingAssistant.DateOfBirth" required>
+        </div>
+        <div>
+            <label for="gender">Gender:</label>
+            <input type="text" id="gender" @bind="@CreatingAssistant.Gender" required>
+        </div>
+        <div>
+            <label for="contactInformation">Contact Information:</label>
+            <textarea id="contactInformation" @bind="@CreatingAssistant.ContactInformation"></textarea>
+        </div>
+        <div>
+            <button type="submit">Create</button>
+            <button type="button" @onclick="@CancelCreate">Cancel</button>
+        </div>
+    </form>
+}
+
+@code {
+    private Registrar CreatingAssistant = new Registrar();
+
+    private async Task HandleSubmit()
+    {
+        await RegistrarService.CreateAsync(CreatingAssistant);
+        NavigationManager.NavigateTo("/registrarpage");
+    }
+
+    private void CancelCreate()
+    {
+        NavigationManager.NavigateTo("/registrar/create");
+    }
+}
