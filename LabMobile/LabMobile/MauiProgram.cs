@@ -38,6 +38,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IRegistrarService, RegistrarService>();
         builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
         builder.Services.AddSingleton<IAuthService, AuthService>();
+        builder.Services.AddSingleton<ITimeslotService, TimeslotService>();
 
         builder.Services.AddSingleton<WeatherForecastService>();
 

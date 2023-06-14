@@ -1,0 +1,74 @@
+﻿@page "/timeslotselection"
+
+@using LabModels
+@using LabMobile.Services
+@inject NavigationManager NavigationManager
+
+<h3>ClientAnalisReception</h3>
+
+
+@if (IsConfirmationDialogVisible)
+{
+    <div class="confirmation-dialog">
+        <p>Are you sure you want to book this timeslot?</p>
+        <button @onclick="BookTimeslot">Yes</button>
+        <button @onclick="CancelBooking">No</button>
+    </div>
+}
+
+@if (Timeslots == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var timeslot in Timeslots)
+        {
+            <li>
+                <p>@TimeZoneInfo.ConvertTimeFromUtc(timeslot.Time, TimeZoneInfo.Local).ToString("yyyy-MM-dd HH:mm")</p>
+                <button @onclick="() => ShowConfirmationDialog(timeslot.Id)">Select</button>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Timeslot> Timeslots;
+    private bool IsConfirmationDialogVisible;
+    private Guid SelectedTimeslotId;
+
+    [Inject]
+    private ITimeslotService TimeslotService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var analysisReceptionPointId = await SecureStorage.GetAsync("receptionPointId");
+
+        Timeslots = await TimeslotService.GetTimeslotsAsync(Guid.Parse(analysisReceptionPointId));
+    }
+
+    private void ShowConfirmationDialog(Guid timeslotId)
+    {
+        SelectedTimeslotId = timeslotId;
+        IsConfirmationDialogVisible = true;
+        StateHasChanged(); // Force re-rendering
+
+    }
+
+    private async Task BookTimeslot()
+    {
+        var selectedTimeslot = Timeslots.FirstOrDefault(t => t.Id == SelectedTimeslotId);
+        if (selectedTimeslot != null && selectedTimeslot.Avaliable)
+        {
+            await TimeslotService.BookTimeslotAsync(selectedTimeslot.Time);
+            IsConfirmationDialogVisible = false;
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    private void CancelBooking()
+    {
+        IsConfirmationDialogVisible = false;
+    }
+}

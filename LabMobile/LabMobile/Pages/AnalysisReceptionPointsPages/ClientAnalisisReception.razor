@@ -1,0 +1,45 @@
+﻿@page "/clientanalysisreception"
+
+@using LabModels
+@using LabMobile.Services
+@inject NavigationManager NavigationManager
+
+<h3>ClientAnalisReception</h3>
+
+@if (ReceptionPoints == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var receptionPoint in ReceptionPoints)
+        {
+            <li>
+                <h3>@receptionPoint.Name</h3>
+                <p>@receptionPoint.Address</p>
+                <p>@receptionPoint.ContactInformation</p>
+                <button @onclick="() => SelectReceptionPoint(receptionPoint.Id)">Select</button>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<AnalysisReceptionPoint> ReceptionPoints;
+
+    [Inject]
+    private IAnalysisReceptionPointService AnalysisReceptionPointService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ReceptionPoints = await AnalysisReceptionPointService.GetAllAnalysisReceptionPointsAsync();
+    }
+
+    private async Task SelectReceptionPoint(Guid receptionPointId)
+    {
+        var url = $"/timeslotselection";
+        await SecureStorage.SetAsync("receptionPointId", receptionPointId.ToString());
+        NavigationManager.NavigateTo(url);
+    }
+}

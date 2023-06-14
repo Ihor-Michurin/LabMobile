@@ -1,0 +1,47 @@
+﻿@page "/clientanalysis"
+
+@using LabModels
+@using LabMobile.Services
+@inject NavigationManager NavigationManager
+
+<h3>ClientAnalisList</h3>
+
+@if (Analyses == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var analysis in Analyses)
+        {
+            <li>
+                <h3>@analysis.Name</h3>
+                <p>@analysis.Description</p>
+                <p>@analysis.Duration minutes</p>
+                <p>Price: $@analysis.Price</p>
+                <button @onclick="() => SelectAnalysis(analysis.Id, analysis.Duration)">Select</button>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Analysis> Analyses;
+
+    [Inject]
+    private IAnalysisService AnalysisService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Analyses = await AnalysisService.GetAnalysesAsync();
+    }
+
+    private async Task SelectAnalysis(Guid analysisId, int duration)
+    {
+        var url = $"/clientanalysisreception";
+        await SecureStorage.SetAsync("analysisId", analysisId.ToString());
+        await SecureStorage.SetAsync("duration", duration.ToString());
+        NavigationManager.NavigateTo(url);
+    }
+}

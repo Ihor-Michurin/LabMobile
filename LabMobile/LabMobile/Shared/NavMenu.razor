@@ -38,8 +38,14 @@
             </button>
         </div>
 
+        
         @if (userRole == "Admin")
         {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/clientanalysis">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Analysis list
+                </NavLink>
+            </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="AirQualityMeasurements/AirQualityMeasurements">
                     <span class="oi oi-list-rich" aria-hidden="true"></span> airqualitymeasurements
@@ -117,7 +123,6 @@
 
     private async void AuthService_RoleChanged(object sender, EventArgs e)
     {
-        // Update the menu based on the new role
         await UpdateMenuOnRoleChange();
     }
 
