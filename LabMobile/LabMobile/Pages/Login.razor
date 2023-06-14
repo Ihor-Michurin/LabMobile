@@ -1,5 +1,5 @@
 ﻿@page "/login"
-@using LabMobile.Models
+@using LabModels
 @using LabMobile.Services
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
@@ -24,7 +24,7 @@
 </EditForm>
 
 @code {
-    private User user = new User();
+    private UserDto user = new UserDto();
 
     private async Task HandleLogin()
     {

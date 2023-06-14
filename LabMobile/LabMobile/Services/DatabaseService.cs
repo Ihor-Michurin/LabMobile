@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace LabMobile.Services
 {
@@ -17,7 +18,11 @@ namespace LabMobile.Services
 
     public class DatabaseService : IDatabaseService
     {
-        private string _baseUrl = "https://labapi123.azurewebsites.net";
+        private readonly string BaseUrl;
+
+        public DatabaseService(IConfiguration configuration) {
+            BaseUrl = configuration.GetValue<string>("AppSettings:MainApiUrl") + "/api/DatabaseData";
+        }
 
         async Task<bool> IDatabaseService.DeleteData()
         {
@@ -28,7 +33,7 @@ namespace LabMobile.Services
                 {
                     var accessToken = await SecureStorage.GetAsync("AccessToken");
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                    string url = $"{_baseUrl}/api/DatabaseData";
+                    string url = BaseUrl;
                     var apiResponse = await client.DeleteAsync(url);
 
                     if (apiResponse.StatusCode == System.Net.HttpStatusCode.NoContent)
@@ -50,7 +55,7 @@ namespace LabMobile.Services
             {
                 using (var client = new HttpClient())
                 {
-                    string url = $"{_baseUrl}/api/DatabaseData";
+                    string url = BaseUrl;
                     var accessToken = await SecureStorage.GetAsync("AccessToken");
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                     var apiResponse = await client.GetAsync(url);
@@ -79,7 +84,7 @@ namespace LabMobile.Services
                 {
                     var accessToken = await SecureStorage.GetAsync("AccessToken");
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                    string url = $"{_baseUrl}/api/DatabaseData";
+                    string url = BaseUrl;
 
                     var apiResponse = await client.PostAsync(url, new StringContent(database, Encoding.UTF8, "application/json"));
                     result = true;

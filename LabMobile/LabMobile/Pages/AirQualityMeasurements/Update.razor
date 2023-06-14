@@ -1,6 +1,6 @@
 ﻿@page "/airqualitymeasurements/update/{id}"
 
-@using LabMobile.Models
+@using LabModels
 @using LabMobile.Services
 @inject IAirQualityMeasurementService measurementService
 @inject NavigationManager NavigationManager;
@@ -36,7 +36,7 @@ else
         </div>
         <div class="form-group">
             <label for="gas">Gas:</label>
-            <input type="number" step="0.01" class="form-control" id="gas" name="gas" @bind="measurement.Gas" />
+            <input type="number" step="0.01" class="form-control" id="gas" name="gas" @bind="measurement.Co2Equivalent" />
         </div>
         <div class="form-group">
             <label for="iaq">IAQ:</label>
@@ -88,7 +88,7 @@ else
                 Temperature = measurement.Temperature,
                 Pressure = measurement.Pressure,
                 Humidity = measurement.Humidity,
-                Gas = measurement.Gas,
+                Co2Equivalent = measurement.Co2Equivalent,
                 Iaq = measurement.Iaq,
                 IsNormal = measurement.IsNormal
             });

@@ -7,7 +7,8 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using LabMobile.Models;
+using LabModels;
+using Microsoft.Extensions.Configuration;
 
 namespace LabMobile.Services
 {
@@ -24,11 +25,12 @@ namespace LabMobile.Services
     public class AnalysisService : IAnalysisService
     {
         private readonly HttpClient _httpClient;
-        private const string BaseUrl = "https://labapi123.azurewebsites.net/api/Analyses";
+        private readonly string BaseUrl;
 
-        public AnalysisService()
+        public AnalysisService(IConfiguration configuration)
         {
             _httpClient = new HttpClient();
+            BaseUrl = configuration.GetValue<string>("AppSettings:MainApiUrl") + "/api/Analysis";
         }
 
         public async Task<List<Analysis>> GetAnalysesAsync()

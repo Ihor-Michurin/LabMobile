@@ -1,7 +1,7 @@
 ﻿@page "/AirQualityMeasurements/AirQualityMeasurements"
 @using System.Linq
 @using System.Threading.Tasks
-@using LabMobile.Models
+@using LabModels
 @using LabMobile.Services
 @inject NavigationManager NavigationManager;
 
@@ -48,7 +48,7 @@ else
                     <td>@measurement.Temperature</td>
                     <td>@measurement.Pressure</td>
                     <td>@measurement.Humidity</td>
-                    <td>@measurement.Gas</td>
+                    <td>@measurement.Co2Equivalent</td>
                     <td>@measurement.Iaq</td>
                     <td>@measurement.IsNormal</td>
                     <td>

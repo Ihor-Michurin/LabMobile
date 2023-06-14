@@ -1,7 +1,8 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using LabMobile.Models;
+using LabModels;
+using Microsoft.Extensions.Configuration;
 
 namespace LabMobile.Services
 {
@@ -18,18 +19,20 @@ namespace LabMobile.Services
     {
         private readonly HttpClient _httpClient;
         private readonly JsonSerializerOptions _jsonSerializerOptions;
+        private readonly string BaseUrl;
 
-        public AnalysisReceptionPointService()
+        public AnalysisReceptionPointService(IConfiguration configuration)
         {
             _httpClient = new HttpClient();
             _jsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            BaseUrl = configuration.GetValue<string>("AppSettings:MainApiUrl") + "/api/AnalysisReceptionPoints";
         }
 
         public async Task<List<AnalysisReceptionPoint>> GetAllAnalysisReceptionPointsAsync()
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var response = await _httpClient.GetAsync("https://labapi123.azurewebsites.net/api/AnalysisReceptionPoints");
+            var response = await _httpClient.GetAsync(BaseUrl);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<AnalysisReceptionPoint>>(content, _jsonSerializerOptions);
@@ -39,7 +42,7 @@ namespace LabMobile.Services
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var response = await _httpClient.GetAsync($"https://labapi123.azurewebsites.net/api/AnalysisReceptionPoints/{id}");
+            var response = await _httpClient.GetAsync($"{BaseUrl}/{id}");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<AnalysisReceptionPoint>(content, _jsonSerializerOptions);
@@ -51,7 +54,7 @@ namespace LabMobile.Services
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var json = JsonSerializer.Serialize(analysisReceptionPoint);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("https://labapi123.azurewebsites.net/api/AnalysisReceptionPoints", content);
+            var response = await _httpClient.PostAsync(BaseUrl, content);
             response.EnsureSuccessStatusCode();
         }
 
@@ -61,7 +64,7 @@ namespace LabMobile.Services
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var json = JsonSerializer.Serialize(analysisReceptionPoint);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync($"https://labapi123.azurewebsites.net/api/AnalysisReceptionPoints/{id}", content);
+            var response = await _httpClient.PutAsync($"{BaseUrl}/{id}", content);
             response.EnsureSuccessStatusCode();
         }
 
@@ -69,7 +72,7 @@ namespace LabMobile.Services
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var response = await _httpClient.DeleteAsync($"https://labapi123.azurewebsites.net/api/AnalysisReceptionPoints/{id}");
+            var response = await _httpClient.DeleteAsync($"{BaseUrl}/{id}");
             response.EnsureSuccessStatusCode();
         }
     }

@@ -1,8 +1,9 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Text;
-using LabMobile.Models;
+using LabModels;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace LabMobile.Services
 {
@@ -22,11 +23,12 @@ namespace LabMobile.Services
     public class AirQualityMeasurementService: IAirQualityMeasurementService
     {
         private readonly HttpClient _httpClient;
-        private const string BaseUrl = "https://labapi123.azurewebsites.net/api/AirQualityMeasurements";
+        private readonly string BaseUrl;
 
-        public AirQualityMeasurementService()
+        public AirQualityMeasurementService(IConfiguration configuration)
         {
             _httpClient = new HttpClient();
+            BaseUrl = configuration.GetValue<string>("AppSettings:MainApiUrl") + "/api/AirQualityMeasurements";
         }
 
         public async Task<List<AirQualityMeasurement>> GetAirQualityMeasurementsAsync()

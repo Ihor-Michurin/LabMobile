@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using LabMobile.Data;
 using LabMobile.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace LabMobile;
 
@@ -16,7 +17,13 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 			});
 
-		builder.Services.AddMauiBlazorWebView();
+        var configuration = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        .Build();
+        builder.Services.AddSingleton<IConfiguration>(configuration);
+
+
+        builder.Services.AddMauiBlazorWebView();
 
 #if DEBUG
 		builder.Services.AddBlazorWebViewDeveloperTools();
@@ -34,6 +41,6 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<WeatherForecastService>();
 
-		return builder.Build();
+        return builder.Build();
 	}
 }

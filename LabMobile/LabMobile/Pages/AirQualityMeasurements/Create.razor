@@ -1,7 +1,7 @@
 ﻿@page "/AirQualityMeasurements/create"
 @using System.Linq
 @using System.Threading.Tasks
-@using LabMobile.Models
+@using LabModels
 @using LabMobile.Services
 @inject NavigationManager NavigationManager;
 
@@ -29,7 +29,7 @@
 </div>
 <div class="form-group">
     <label for="gas">Gas:</label>
-    <input type="number" class="form-control" id="gas" @bind="@AirQualityMeasurement.Gas" />
+    <input type="number" class="form-control" id="gas" @bind="@AirQualityMeasurement.Co2Equivalent" />
 </div>
 <div class="form-group">
     <label for="iaq">IAQ:</label>
