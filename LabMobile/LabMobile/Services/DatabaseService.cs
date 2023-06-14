@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +26,8 @@ namespace LabMobile.Services
             {
                 using (var client = new HttpClient())
                 {
+                    var accessToken = await SecureStorage.GetAsync("AccessToken");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                     string url = $"{_baseUrl}/api/DatabaseData";
                     var apiResponse = await client.DeleteAsync(url);
 
@@ -47,7 +51,8 @@ namespace LabMobile.Services
                 using (var client = new HttpClient())
                 {
                     string url = $"{_baseUrl}/api/DatabaseData";
-
+                    var accessToken = await SecureStorage.GetAsync("AccessToken");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                     var apiResponse = await client.GetAsync(url);
 
                     if (apiResponse.StatusCode == System.Net.HttpStatusCode.OK)
@@ -72,6 +77,8 @@ namespace LabMobile.Services
             {
                 using (var client = new HttpClient())
                 {
+                    var accessToken = await SecureStorage.GetAsync("AccessToken");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                     string url = $"{_baseUrl}/api/DatabaseData";
 
                     var apiResponse = await client.PostAsync(url, new StringContent(database, Encoding.UTF8, "application/json"));

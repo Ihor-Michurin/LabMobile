@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Net.Http.Headers;
+using System.Net.Http;
+using System.Text;
 using LabMobile.Models;
 using Newtonsoft.Json;
 
@@ -29,6 +31,9 @@ namespace LabMobile.Services
 
         public async Task<List<AirQualityMeasurement>> GetAirQualityMeasurementsAsync()
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
             var response = await _httpClient.GetAsync(BaseUrl);
             if (response.IsSuccessStatusCode)
             {
@@ -40,6 +45,8 @@ namespace LabMobile.Services
 
         public async Task<AirQualityMeasurement> GetAirQualityMeasurementAsync(Guid id)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var url = $"{BaseUrl}/{id}";
             var response = await _httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode)
@@ -52,6 +59,8 @@ namespace LabMobile.Services
 
         public async Task<bool> CreateAirQualityMeasurementAsync(AirQualityMeasurement measurement)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var json = JsonConvert.SerializeObject(measurement);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(BaseUrl, content);
@@ -60,6 +69,8 @@ namespace LabMobile.Services
 
         public async Task<bool> UpdateAirQualityMeasurementAsync(AirQualityMeasurement measurement)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var url = $"{BaseUrl}/{measurement.Id}";
             var json = JsonConvert.SerializeObject(measurement);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -69,6 +80,8 @@ namespace LabMobile.Services
 
         public async Task<bool> DeleteAirQualityMeasurementAsync(Guid id)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var url = $"{BaseUrl}/{id}";
             var response = await _httpClient.DeleteAsync(url);
             return response.IsSuccessStatusCode;

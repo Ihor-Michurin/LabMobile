@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http.Headers;
+using System.Text;
 using LabMobile.Models;
 using Newtonsoft.Json;
 
@@ -26,6 +27,8 @@ namespace LabMobile.Services
 
         public async Task<Registrar> GetAsync(Guid id)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.GetAsync($"https://labapi123.azurewebsites.net/api/Registrars/{id}");
             response.EnsureSuccessStatusCode();
 
@@ -35,6 +38,8 @@ namespace LabMobile.Services
 
         public async Task<List<Registrar>> GetAllAsync()
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.GetAsync("https://labapi123.azurewebsites.net/api/Registrars");
             response.EnsureSuccessStatusCode();
 
@@ -44,6 +49,8 @@ namespace LabMobile.Services
 
         public async Task CreateAsync(Registrar assistant)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             assistant.DateOfBirth = DateTime.SpecifyKind(assistant.DateOfBirth, DateTimeKind.Utc);
 
             var json = JsonConvert.SerializeObject(assistant);
@@ -59,6 +66,8 @@ namespace LabMobile.Services
 
         public async Task UpdateAsync(Guid id, Registrar assistant)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             assistant.DateOfBirth = DateTime.SpecifyKind(assistant.DateOfBirth, DateTimeKind.Utc);
 
             var response = await _httpClient.PutAsync($"https://labapi123.azurewebsites.net/api/Registrars/{id}", new StringContent(JsonConvert.SerializeObject(assistant), Encoding.UTF8, "application/json"));
@@ -67,6 +76,8 @@ namespace LabMobile.Services
 
         public async Task DeleteAsync(Guid id)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.DeleteAsync($"https://labapi123.azurewebsites.net/api/Registrars/{id}");
             response.EnsureSuccessStatusCode();
         }

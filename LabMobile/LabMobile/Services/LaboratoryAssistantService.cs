@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +32,8 @@ namespace LabMobile.Services
 
         public async Task<LaboratoryAssistant> GetAsync(Guid id)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.GetAsync($"https://labapi123.azurewebsites.net/api/LaboratoryAssistants/{id}");
             response.EnsureSuccessStatusCode();
 
@@ -40,6 +43,8 @@ namespace LabMobile.Services
 
         public async Task<List<LaboratoryAssistant>> GetAllAsync()
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.GetAsync("https://labapi123.azurewebsites.net/api/LaboratoryAssistants");
             response.EnsureSuccessStatusCode();
 
@@ -49,6 +54,8 @@ namespace LabMobile.Services
 
         public async Task CreateAsync(LaboratoryAssistant assistant)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             assistant.DateOfBirth = DateTime.SpecifyKind(assistant.DateOfBirth, DateTimeKind.Utc);
 
             var json = JsonConvert.SerializeObject(assistant);
@@ -64,6 +71,8 @@ namespace LabMobile.Services
 
         public async Task UpdateAsync(Guid id, LaboratoryAssistant assistant)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             assistant.DateOfBirth = DateTime.SpecifyKind(assistant.DateOfBirth, DateTimeKind.Utc);
             var response = await _httpClient.PutAsync($"https://labapi123.azurewebsites.net/api/LaboratoryAssistants/{id}", new StringContent(JsonConvert.SerializeObject(assistant), Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
@@ -71,6 +80,8 @@ namespace LabMobile.Services
 
         public async Task DeleteAsync(Guid id)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.DeleteAsync($"https://labapi123.azurewebsites.net/api/LaboratoryAssistants/{id}");
             response.EnsureSuccessStatusCode();
         }

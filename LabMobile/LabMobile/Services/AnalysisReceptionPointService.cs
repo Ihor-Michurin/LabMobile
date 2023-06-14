@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 using LabMobile.Models;
 
@@ -26,6 +27,8 @@ namespace LabMobile.Services
 
         public async Task<List<AnalysisReceptionPoint>> GetAllAnalysisReceptionPointsAsync()
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.GetAsync("https://labapi123.azurewebsites.net/api/AnalysisReceptionPoints");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -34,6 +37,8 @@ namespace LabMobile.Services
 
         public async Task<AnalysisReceptionPoint> GetAnalysisReceptionPointAsync(Guid id)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.GetAsync($"https://labapi123.azurewebsites.net/api/AnalysisReceptionPoints/{id}");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -42,6 +47,8 @@ namespace LabMobile.Services
 
         public async Task AddAnalysisReceptionPointAsync(AnalysisReceptionPoint analysisReceptionPoint)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var json = JsonSerializer.Serialize(analysisReceptionPoint);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync("https://labapi123.azurewebsites.net/api/AnalysisReceptionPoints", content);
@@ -50,6 +57,8 @@ namespace LabMobile.Services
 
         public async Task UpdateAnalysisReceptionPointAsync(Guid id, AnalysisReceptionPoint analysisReceptionPoint)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var json = JsonSerializer.Serialize(analysisReceptionPoint);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync($"https://labapi123.azurewebsites.net/api/AnalysisReceptionPoints/{id}", content);
@@ -58,6 +67,8 @@ namespace LabMobile.Services
 
         public async Task DeleteAnalysisReceptionPointAsync(Guid id)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.DeleteAsync($"https://labapi123.azurewebsites.net/api/AnalysisReceptionPoints/{id}");
             response.EnsureSuccessStatusCode();
         }

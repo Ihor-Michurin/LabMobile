@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using LabMobile.Models;
@@ -30,6 +31,8 @@ namespace LabMobile.Services
 
         public async Task<Patient> GetAsync(Guid id)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.GetAsync($"https://labapi123.azurewebsites.net/api/Patients/{id}");
             response.EnsureSuccessStatusCode();
 
@@ -39,6 +42,8 @@ namespace LabMobile.Services
 
         public async Task<List<Patient>> GetAllAsync()
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.GetAsync("https://labapi123.azurewebsites.net/api/Patients");
             response.EnsureSuccessStatusCode();
 
@@ -48,6 +53,8 @@ namespace LabMobile.Services
 
         public async Task CreateAsync(Patient assistant)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             assistant.DateOfBirth = DateTime.SpecifyKind(assistant.DateOfBirth, DateTimeKind.Utc);
 
             var json = JsonConvert.SerializeObject(assistant);
@@ -63,6 +70,8 @@ namespace LabMobile.Services
 
         public async Task UpdateAsync(Guid id, Patient assistant)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             assistant.DateOfBirth = DateTime.SpecifyKind(assistant.DateOfBirth, DateTimeKind.Utc);
 
             var response = await _httpClient.PutAsync($"https://labapi123.azurewebsites.net/api/Patients/{id}", new StringContent(JsonConvert.SerializeObject(assistant), Encoding.UTF8, "application/json"));
@@ -71,6 +80,8 @@ namespace LabMobile.Services
 
         public async Task DeleteAsync(Guid id)
         {
+            var accessToken = await SecureStorage.GetAsync("AccessToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.DeleteAsync($"https://labapi123.azurewebsites.net/api/Patients/{id}");
             response.EnsureSuccessStatusCode();
         }
