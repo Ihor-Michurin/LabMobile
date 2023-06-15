@@ -1,0 +1,45 @@
+﻿@page "/myresults"
+
+
+@using LabModels
+@using LabMobile.Services
+@inject NavigationManager NavigationManager
+
+<h3>MyAnalisis</h3>
+
+@if (analysisResults != null)
+{
+    <ul>
+        @foreach (var result in analysisResults)
+        {
+            <li>
+                <strong>Patient Name:</strong> @result.PatientName <br />
+                <strong>Laboratory Assistant Name:</strong> @result.LaboratoryAssistantName <br />
+                <strong>Nurse Name:</strong> @result.NurseName <br />
+                <strong>Registrar Name:</strong> @result.RegistrarName <br />
+                <strong>Analysis Name:</strong> @result.AnalysisName <br />
+                <strong>Analysis Reception Point Name:</strong> @result.AnalysisReceptionPointName <br />
+                <strong>Time:</strong> @result.Time <br />
+                <strong>Analysis Values:</strong> @result.AnalysisValues <br />
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No analysis results found.</p>
+}
+
+
+@code {
+    [Inject]
+    private IAnalysisResultService AnalysisResultService { get; set; }
+
+
+    private List<AnalysisResultResult> analysisResults;
+
+    protected override async Task OnInitializedAsync()
+    {
+        analysisResults = await AnalysisResultService.GetAnalysisResultResultAsync();
+    }
+}

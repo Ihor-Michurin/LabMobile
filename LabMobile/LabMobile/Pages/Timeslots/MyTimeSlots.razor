@@ -1,0 +1,71 @@
+﻿@page "/mytimeslots"
+
+@using LabModels
+@using LabMobile.Services
+@inject NavigationManager NavigationManager
+@inject Microsoft.JSInterop.IJSRuntime JSRuntime
+
+<h3>Booked Timeslots</h3>
+
+@if (Timeslots != null && Timeslots.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date/Time</th>
+                <th>Analysis Reception Point</th>
+                <th>Duration</th>
+                <th>Analysis Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var timeslot in Timeslots)
+            {
+                <tr>
+                    <td>@TimeZoneInfo.ConvertTimeFromUtc(timeslot.Time, TimeZoneInfo.Local)</td>
+                    <td>@timeslot.AnalysisReceptionPointName</td>
+                    <td>@timeslot.AnalysisDuration</td>
+                    <td>@timeslot.AnalysisName</td>
+                    <td>@timeslot.AnalysisPrice</td>
+                    <td>@timeslot.AnalysisDescription</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="@(() => cancelBooking(timeslot))">Cancel</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No booked timeslots available.</p>
+}
+
+@code {
+    [Inject]
+    private ITimeslotService TimeslotService { get; set; }
+
+    List<TimeslotResult> Timeslots { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Timeslots = await TimeslotService.GetPatientTimeslotsAsync();
+    }
+
+    protected async void cancelBooking(TimeslotResult timeslot)
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", new object[] { "Are you sure you want to cancel this booking?" });
+        if (confirmed)
+        {
+            if (timeslot != null)
+            {
+                await TimeslotService.CanselBookingPatientTimeslotsAsync(timeslot);
+                Timeslots.Remove(timeslot);
+                StateHasChanged();
+            }
+        }
+    }
+}
