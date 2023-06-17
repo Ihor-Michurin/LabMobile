@@ -40,6 +40,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IAuthService, AuthService>();
         builder.Services.AddSingleton<ITimeslotService, TimeslotService>();
         builder.Services.AddSingleton<IAnalysisResultService, AnalysisResultService>();
+        builder.Services.AddSingleton<IChatGptService, ChatGptService>();
 
         builder.Services.AddSingleton<WeatherForecastService>();
 

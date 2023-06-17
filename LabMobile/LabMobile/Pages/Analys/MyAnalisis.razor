@@ -1,6 +1,5 @@
 ﻿@page "/myresults"
 
-
 @using LabModels
 @using LabMobile.Services
 @inject NavigationManager NavigationManager
@@ -21,6 +20,12 @@
                 <strong>Analysis Reception Point Name:</strong> @result.AnalysisReceptionPointName <br />
                 <strong>Time:</strong> @result.Time <br />
                 <strong>Analysis Values:</strong> @result.AnalysisValues <br />
+
+                <button @onclick="async () => await GetAdvice(result)">AI Assistance</button>
+                @if (adviceDictionary.ContainsKey(result))
+                {
+                    <p><strong>AI Advice:</strong> @adviceDictionary[result]</p>
+                }
             </li>
         }
     </ul>
@@ -35,11 +40,24 @@ else
     [Inject]
     private IAnalysisResultService AnalysisResultService { get; set; }
 
+    [Inject]
+    private IChatGptService ChatGptService { get; set; }
 
     private List<AnalysisResultResult> analysisResults;
+    private Dictionary<AnalysisResultResult, string> adviceDictionary;
 
     protected override async Task OnInitializedAsync()
     {
         analysisResults = await AnalysisResultService.GetAnalysisResultResultAsync();
+        adviceDictionary = new Dictionary<AnalysisResultResult, string>();
+    }
+
+    private async Task GetAdvice(AnalysisResultResult analysisResult)
+    {
+        if (!adviceDictionary.ContainsKey(analysisResult))
+        {
+            var advice = await ChatGptService.GetAdviceAsync(analysisResult);
+            adviceDictionary.Add(analysisResult, advice);
+        }
     }
 }
