@@ -52,8 +52,33 @@
     <ItemGroup>
         <PackageReference Include="LabModels" Version="1.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="7.0.5" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resources\Programloc.uk.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Programloc.uk.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Programloc.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Programloc.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\Programloc.uk.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Programloc.uk.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Programloc.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>Programloc.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
 </Project>

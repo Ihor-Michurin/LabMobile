@@ -1,7 +1,55 @@
 ﻿@page "/"
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Programloc> Localizer
 
-<h1>Hello, world!</h1>
+<h1>@Localizer["Hello, world"]</h1>
 
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+<NavigationMenu Culture="@Culture" />
+
+<strong>Culture:</strong>
+<select class="form-control" @bind="Culture" style="width:300px; margin-left:10px;">
+    @foreach (var culture in cultures)
+    {
+        <option value="@culture">@culture.DisplayName</option>
+    }
+</select>
+
+@code
+{
+    CultureInfo[] cultures = new[]
+    {
+        new CultureInfo("en-US"),
+        new CultureInfo("uk-UA")
+    };
+
+    CultureInfo Culture
+    {
+        get => CultureInfo.CurrentCulture;
+        set
+        {
+            if (CultureInfo.CurrentCulture != value)
+            {
+                CultureInfo.CurrentCulture = value;
+                CultureInfo.CurrentUICulture = value;
+                CultureInfo.DefaultThreadCurrentCulture = value;
+                CultureInfo.DefaultThreadCurrentUICulture = value;
+                Preferences.Set("language", value.Name);
+                StateHasChanged();
+            }
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        var savedLanguage = Preferences.Get("language", "en-US");
+        if (!string.IsNullOrEmpty(savedLanguage))
+        {
+            var culture = new CultureInfo(savedLanguage);
+            Culture = culture;
+        }
+    }
+}

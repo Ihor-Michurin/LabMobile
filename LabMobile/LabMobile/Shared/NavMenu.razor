@@ -1,4 +1,7 @@
 ﻿@using LabMobile.Services
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Programloc> Localizer
 @inject NavigationManager NavigationManager
 
 <div class="top-row ps-3 navbar navbar-dark">
@@ -14,27 +17,27 @@
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+                <span class="oi oi-home" aria-hidden="true"></span> @Localizer["Home"]
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
+                <span class="oi oi-plus" aria-hidden="true"></span> @Localizer["Counter"]
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+                <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Fetch data"]
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="login">
-                <span class="oi oi-plus" aria-hidden="true"></span> Login
+                <span class="oi oi-plus" aria-hidden="true"></span> @Localizer["Login"]
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <button class="btn btn-link nav-link" @onclick="Logout">
-                <span class="oi oi-account-logout" aria-hidden="true"></span> Logout
+                <span class="oi oi-account-logout" aria-hidden="true"></span> @Localizer["Logout"]
             </button>
         </div>
 
@@ -43,69 +46,69 @@
         {
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="/clientanalysis">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Analysis list
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Analysis list"]
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="/mytimeslots">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> my time slots
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["My time slots"]
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="/myresults">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> my results
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["My results"]
                 </NavLink>
             </div>
 
             
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="AirQualityMeasurements/AirQualityMeasurements">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> airqualitymeasurements
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Air Quality Measurements"]
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="analysis">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> analysis
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Analysis"]
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="analysisreceptionpointss">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> analysisreceptionpointss
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Analysis Reception Points"]
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="laboratoryassistants">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> laboratoryassistants
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Laboratory Assistants"]
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="nurses">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> nurses
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Nurses"]
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="patient">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> patient
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Patient"]
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="registrarpage">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> registrarpage
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Registrar"]
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="ExportData">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Export Data
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Export Data"]
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="ImportData">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Import Data
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Import Data"]
                 </NavLink>
             </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="DeleteData">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Delete Data
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @Localizer["Delete Data"]
             </NavLink>
         </div>
         }
