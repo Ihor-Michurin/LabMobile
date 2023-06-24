@@ -2,6 +2,12 @@
 
 @using LabModels
 @using LabMobile.Services
+@using LiqPay
+@using LiqPay.SDK.Dto;
+@using LiqPay.SDK;
+@using LiqPay.SDK.Dto.Enums;
+
+
 @inject NavigationManager NavigationManager
 
 <h3>ClientAnalisReception</h3>
@@ -41,6 +47,9 @@ else
     [Inject]
     private ITimeslotService TimeslotService { get; set; }
 
+    [Inject]
+    private IAnalysisService AnalysisService { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         var analysisReceptionPointId = await SecureStorage.GetAsync("receptionPointId");
@@ -61,7 +70,38 @@ else
         var selectedTimeslot = Timeslots.FirstOrDefault(t => t.Id == SelectedTimeslotId);
         if (selectedTimeslot != null && selectedTimeslot.Avaliable)
         {
-            await TimeslotService.BookTimeslotAsync(selectedTimeslot.Time);
+            var analisisId = await SecureStorage.GetAsync("analysisId");
+
+            var analisis = await AnalysisService.GetAnalysisAsync(Guid.Parse(analisisId));
+
+
+            // Create a LiqPay payment request
+            var liqPayRequest = new LiqPayRequest
+                {
+                    Amount = Convert.ToDouble(analisis.Price), // Set the payment amount
+                    Currency = "UAH", // Set the payment currency
+                    Description = "Timeslot Booking. Time: " + selectedTimeslot.Time + " . Analisis: " + analisis.Name, // Set the payment description
+                    OrderId = Guid.NewGuid().ToString(), // Generate a unique order ID
+
+                    Email = "email@example.com",
+                    Action = LiqPayRequestAction.InvoiceSend,
+                    Language = LiqPayRequestLanguage.EN,
+                    Goods = new List<LiqPayRequestGoods> {
+        new LiqPayRequestGoods {
+            Amount = Convert.ToDouble(analisis.Price),
+            Count = 1,
+            Unit = "pcs.",
+            Name = analisis.Name,
+        }
+    }
+                };
+
+            var liqPayClient = new LiqPayClient("sandbox_i58062972179", "sandbox_sy2Cq9G7ECd0raFrFlv1JURfNzykTVhMR7hsegmM");
+            var response = await liqPayClient.RequestAsync("request", liqPayRequest);
+
+            NavigationManager.NavigateTo(response.Href, forceLoad: true);
+
+           // await TimeslotService.BookTimeslotAsync(selectedTimeslot.Time);
             IsConfirmationDialogVisible = false;
             NavigationManager.NavigateTo("/");
         }
