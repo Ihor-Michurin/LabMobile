@@ -171,6 +171,9 @@
   <data name="Patient" xml:space="preserve">
     <value>Пацієнти</value>
   </data>
+  <data name="Register" xml:space="preserve">
+    <value>Реєстрація</value>
+  </data>
   <data name="Registrar" xml:space="preserve">
     <value>Реєстратори</value>
   </data>

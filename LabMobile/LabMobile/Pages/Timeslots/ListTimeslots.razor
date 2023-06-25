@@ -50,6 +50,9 @@ else
     [Inject]
     private IAnalysisService AnalysisService { get; set; }
 
+    [Inject]
+    private IAnalysisReceptionPointService AnalysisReceptionPointService { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         var analysisReceptionPointId = await SecureStorage.GetAsync("receptionPointId");
@@ -71,16 +74,17 @@ else
         if (selectedTimeslot != null && selectedTimeslot.Avaliable)
         {
             var analisisId = await SecureStorage.GetAsync("analysisId");
+            var analysisReceptionPointId = await SecureStorage.GetAsync("receptionPointId");
 
             var analisis = await AnalysisService.GetAnalysisAsync(Guid.Parse(analisisId));
-
+            var arp = await AnalysisReceptionPointService.GetAnalysisReceptionPointAsync(Guid.Parse(analysisReceptionPointId));
 
             // Create a LiqPay payment request
             var liqPayRequest = new LiqPayRequest
                 {
                     Amount = Convert.ToDouble(analisis.Price), // Set the payment amount
                     Currency = "UAH", // Set the payment currency
-                    Description = "Timeslot Booking. Time: " + selectedTimeslot.Time + " . Analisis: " + analisis.Name, // Set the payment description
+                    Description = "Timeslot Booking. Time: " + selectedTimeslot.Time + " . Analisis: " + analisis.Name + " . Analisis reception point: " + arp.Name + " , " + arp.Address, // Set the payment description
                     OrderId = Guid.NewGuid().ToString(), // Generate a unique order ID
 
                     Email = "email@example.com",
@@ -101,7 +105,7 @@ else
 
             NavigationManager.NavigateTo(response.Href, forceLoad: true);
 
-           // await TimeslotService.BookTimeslotAsync(selectedTimeslot.Time);
+            await TimeslotService.BookTimeslotAsync(selectedTimeslot.Time);
             IsConfirmationDialogVisible = false;
             NavigationManager.NavigateTo("/");
         }

@@ -171,6 +171,9 @@
   <data name="Patient" xml:space="preserve">
     <value>Patient</value>
   </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
   <data name="Registrar" xml:space="preserve">
     <value>Registrar</value>
   </data>
