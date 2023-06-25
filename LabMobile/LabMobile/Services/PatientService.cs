@@ -13,11 +13,11 @@ namespace LabMobile.Services
     // Interface for Patient service
     public interface IPatientService
     {
-        Task<Patient> GetAsync(Guid id);
+        Task<Patient> GetAsync(Guid? id);
         Task<List<Patient>> GetAllAsync();
         Task CreateAsync(Patient assistant);
-        Task UpdateAsync(Guid id, Patient assistant);
-        Task DeleteAsync(Guid id);
+        Task UpdateAsync(Guid? id, Patient assistant);
+        Task DeleteAsync(Guid? id);
     }
 
     // Implementation of Patient service using HttpClient
@@ -32,7 +32,7 @@ namespace LabMobile.Services
             BaseUrl = configuration.GetValue<string>("AppSettings:MainApiUrl") + "/api/Patients";
         }
 
-        public async Task<Patient> GetAsync(Guid id)
+        public async Task<Patient> GetAsync(Guid? id)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -71,7 +71,7 @@ namespace LabMobile.Services
 
 
 
-        public async Task UpdateAsync(Guid id, Patient assistant)
+        public async Task UpdateAsync(Guid? id, Patient assistant)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -81,7 +81,7 @@ namespace LabMobile.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid? id)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

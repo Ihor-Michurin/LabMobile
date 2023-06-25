@@ -37,7 +37,7 @@ else
         Analyses = await AnalysisService.GetAnalysesAsync();
     }
 
-    private async Task SelectAnalysis(Guid analysisId, int duration)
+    private async Task SelectAnalysis(Guid? analysisId, int duration)
     {
         var url = $"/clientanalysisreception";
         await SecureStorage.SetAsync("analysisId", analysisId.ToString());

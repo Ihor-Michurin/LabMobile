@@ -9,11 +9,11 @@ namespace LabMobile.Services
     // Interface for Registrar service
     public interface IRegistrarService
     {
-        Task<Registrar> GetAsync(Guid id);
+        Task<Registrar> GetAsync(Guid? id);
         Task<List<Registrar>> GetAllAsync();
         Task CreateAsync(Registrar assistant);
-        Task UpdateAsync(Guid id, Registrar assistant);
-        Task DeleteAsync(Guid id);
+        Task UpdateAsync(Guid? id, Registrar assistant);
+        Task DeleteAsync(Guid? id);
     }
 
     // Implementation of Registrar service using HttpClient
@@ -28,7 +28,7 @@ namespace LabMobile.Services
             BaseUrl = configuration.GetValue<string>("AppSettings:MainApiUrl") + "/api/Registrars";
         }
 
-        public async Task<Registrar> GetAsync(Guid id)
+        public async Task<Registrar> GetAsync(Guid? id)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -67,7 +67,7 @@ namespace LabMobile.Services
 
 
 
-        public async Task UpdateAsync(Guid id, Registrar assistant)
+        public async Task UpdateAsync(Guid? id, Registrar assistant)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -77,7 +77,7 @@ namespace LabMobile.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid? id)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

@@ -54,13 +54,13 @@ else
         nurses = await NurseService.GetAllAsync();
     }
 
-    private async Task EditAssistant(Guid id)
+    private async Task EditAssistant(Guid? id)
     {
         // Navigate to edit assistant page
         NavigationManager.NavigateTo($"/nurse/update/{id}");
     }
 
-    private async Task DeleteAssistant(Guid id)
+    private async Task DeleteAssistant(Guid? id)
     {
         // Confirm deletion with user
 

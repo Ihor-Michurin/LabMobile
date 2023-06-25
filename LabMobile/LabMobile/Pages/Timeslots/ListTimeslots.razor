@@ -42,7 +42,7 @@ else
 @code {
     private List<Timeslot> Timeslots;
     private bool IsConfirmationDialogVisible;
-    private Guid SelectedTimeslotId;
+    private Guid? SelectedTimeslotId;
 
     [Inject]
     private ITimeslotService TimeslotService { get; set; }
@@ -60,7 +60,7 @@ else
         Timeslots = await TimeslotService.GetTimeslotsAsync(Guid.Parse(analysisReceptionPointId));
     }
 
-    private void ShowConfirmationDialog(Guid timeslotId)
+    private void ShowConfirmationDialog(Guid? timeslotId)
     {
         SelectedTimeslotId = timeslotId;
         IsConfirmationDialogVisible = true;

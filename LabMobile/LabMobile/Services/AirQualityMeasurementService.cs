@@ -11,13 +11,13 @@ namespace LabMobile.Services
     {
         public Task<List<AirQualityMeasurement>> GetAirQualityMeasurementsAsync();
 
-        public Task<AirQualityMeasurement> GetAirQualityMeasurementAsync(Guid id);
+        public Task<AirQualityMeasurement> GetAirQualityMeasurementAsync(Guid? id);
 
         public Task<bool> CreateAirQualityMeasurementAsync(AirQualityMeasurement measurement);
 
         public Task<bool> UpdateAirQualityMeasurementAsync(AirQualityMeasurement measurement);
 
-        public Task<bool> DeleteAirQualityMeasurementAsync(Guid id);
+        public Task<bool> DeleteAirQualityMeasurementAsync(Guid? id);
     }
 
     public class AirQualityMeasurementService: IAirQualityMeasurementService
@@ -45,7 +45,7 @@ namespace LabMobile.Services
             return null;
         }
 
-        public async Task<AirQualityMeasurement> GetAirQualityMeasurementAsync(Guid id)
+        public async Task<AirQualityMeasurement> GetAirQualityMeasurementAsync(Guid? id)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -80,7 +80,7 @@ namespace LabMobile.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> DeleteAirQualityMeasurementAsync(Guid id)
+        public async Task<bool> DeleteAirQualityMeasurementAsync(Guid? id)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

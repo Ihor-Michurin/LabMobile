@@ -64,13 +64,13 @@ else
         NavigationManager.NavigateTo("/laboratoryassistants/create");
     }
 
-    private async Task EditAssistant(Guid id)
+    private async Task EditAssistant(Guid? id)
     {
         // Navigate to edit assistant page
         NavigationManager.NavigateTo($"/laboratoryassistants/update/{id}");
     }
 
-    private async Task DeleteAssistant(Guid id)
+    private async Task DeleteAssistant(Guid? id)
     {
         // Confirm deletion with user
 

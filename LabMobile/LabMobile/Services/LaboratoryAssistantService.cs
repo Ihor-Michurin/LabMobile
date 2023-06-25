@@ -14,11 +14,11 @@ namespace LabMobile.Services
     // Interface for LaboratoryAssistant service
     public interface ILaboratoryAssistantService
     {
-        Task<LaboratoryAssistant> GetAsync(Guid id);
+        Task<LaboratoryAssistant> GetAsync(Guid? id);
         Task<List<LaboratoryAssistant>> GetAllAsync();
         Task CreateAsync(LaboratoryAssistant assistant);
-        Task UpdateAsync(Guid id, LaboratoryAssistant assistant);
-        Task DeleteAsync(Guid id);
+        Task UpdateAsync(Guid? id, LaboratoryAssistant assistant);
+        Task DeleteAsync(Guid? id);
     }
 
     // Implementation of LaboratoryAssistant service using HttpClient
@@ -33,7 +33,7 @@ namespace LabMobile.Services
             BaseUrl = configuration.GetValue<string>("AppSettings:MainApiUrl") + "/api/LaboratoryAssistants";
         }
 
-        public async Task<LaboratoryAssistant> GetAsync(Guid id)
+        public async Task<LaboratoryAssistant> GetAsync(Guid? id)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -72,7 +72,7 @@ namespace LabMobile.Services
 
 
 
-        public async Task UpdateAsync(Guid id, LaboratoryAssistant assistant)
+        public async Task UpdateAsync(Guid? id, LaboratoryAssistant assistant)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -81,7 +81,7 @@ namespace LabMobile.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid? id)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

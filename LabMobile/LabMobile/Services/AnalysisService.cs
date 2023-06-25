@@ -15,10 +15,10 @@ namespace LabMobile.Services
     public interface IAnalysisService
     {
         Task<List<Analysis>> GetAnalysesAsync();
-        Task<Analysis> GetAnalysisAsync(Guid id);
+        Task<Analysis> GetAnalysisAsync(Guid? id);
         Task<Analysis> CreateAnalysisAsync(Analysis analysis);
-        Task UpdateAnalysisAsync(Guid id, Analysis analysis);
-        Task DeleteAnalysisAsync(Guid id);
+        Task UpdateAnalysisAsync(Guid? id, Analysis analysis);
+        Task DeleteAnalysisAsync(Guid? id);
     }
 
 
@@ -42,7 +42,7 @@ namespace LabMobile.Services
             return await response.Content.ReadFromJsonAsync<List<Analysis>>();
         }
 
-        public async Task<Analysis> GetAnalysisAsync(Guid id)
+        public async Task<Analysis> GetAnalysisAsync(Guid? id)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -60,7 +60,7 @@ namespace LabMobile.Services
             return await response.Content.ReadFromJsonAsync<Analysis>();
         }
 
-        public async Task UpdateAnalysisAsync(Guid id, Analysis analysis)
+        public async Task UpdateAnalysisAsync(Guid? id, Analysis analysis)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -69,7 +69,7 @@ namespace LabMobile.Services
             await _httpClient.PutAsync($"{BaseUrl}/{id}", content);
         }
 
-        public async Task DeleteAnalysisAsync(Guid id)
+        public async Task DeleteAnalysisAsync(Guid? id)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

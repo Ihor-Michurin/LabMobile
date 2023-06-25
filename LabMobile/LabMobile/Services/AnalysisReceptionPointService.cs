@@ -9,10 +9,10 @@ namespace LabMobile.Services
     public interface IAnalysisReceptionPointService
     {
         Task<List<AnalysisReceptionPoint>> GetAllAnalysisReceptionPointsAsync();
-        Task<AnalysisReceptionPoint> GetAnalysisReceptionPointAsync(Guid id);
+        Task<AnalysisReceptionPoint> GetAnalysisReceptionPointAsync(Guid? id);
         Task AddAnalysisReceptionPointAsync(AnalysisReceptionPoint analysisReceptionPoint);
-        Task UpdateAnalysisReceptionPointAsync(Guid id, AnalysisReceptionPoint analysisReceptionPoint);
-        Task DeleteAnalysisReceptionPointAsync(Guid id);
+        Task UpdateAnalysisReceptionPointAsync(Guid? id, AnalysisReceptionPoint analysisReceptionPoint);
+        Task DeleteAnalysisReceptionPointAsync(Guid? id);
     }
 
     public class AnalysisReceptionPointService : IAnalysisReceptionPointService
@@ -38,7 +38,7 @@ namespace LabMobile.Services
             return JsonSerializer.Deserialize<List<AnalysisReceptionPoint>>(content, _jsonSerializerOptions);
         }
 
-        public async Task<AnalysisReceptionPoint> GetAnalysisReceptionPointAsync(Guid id)
+        public async Task<AnalysisReceptionPoint> GetAnalysisReceptionPointAsync(Guid? id)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -58,7 +58,7 @@ namespace LabMobile.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task UpdateAnalysisReceptionPointAsync(Guid id, AnalysisReceptionPoint analysisReceptionPoint)
+        public async Task UpdateAnalysisReceptionPointAsync(Guid? id, AnalysisReceptionPoint analysisReceptionPoint)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -68,7 +68,7 @@ namespace LabMobile.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task DeleteAnalysisReceptionPointAsync(Guid id)
+        public async Task DeleteAnalysisReceptionPointAsync(Guid? id)
         {
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

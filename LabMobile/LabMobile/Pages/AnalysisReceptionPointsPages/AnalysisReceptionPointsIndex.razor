@@ -58,12 +58,12 @@ else
         NavigationManager.NavigateTo("/analysisreceptionpoints/create");
     }
 
-    private void EditAnalysisReceptionPoint(Guid id)
+    private void EditAnalysisReceptionPoint(Guid? id)
     {
         NavigationManager.NavigateTo($"/analysisreceptionpoints/edit/{id}");
     }
 
-    private async Task DeleteAnalysisReceptionPoint(Guid id)
+    private async Task DeleteAnalysisReceptionPoint(Guid? id)
     {
         await AnalysisReceptionPointService.DeleteAnalysisReceptionPointAsync(id);
         AnalysisReceptionPoints = await AnalysisReceptionPointService.GetAllAnalysisReceptionPointsAsync();
