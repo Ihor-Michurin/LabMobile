@@ -3,11 +3,6 @@
 @using LabModels
 @using LabMobile.Services
 @inject NavigationManager NavigationManager
-@inject IJSRuntime JSRuntime
-
-@using PdfSharpCore.Drawing
-@using PdfSharpCore.Pdf
-@using System.IO
 
 <h3>MyAnalisis</h3>
 
@@ -27,7 +22,7 @@
                 <strong>Analysis Values:</strong> @result.AnalysisValues <br />
 
                 <button @onclick="async () => await GetAdvice(result)">AI Assistance</button>
-                <button @onclick="async () => await ExportToPdf(result)">Export to PDF</button>
+                <button @onclick="async () => await SendToEmail(result)">Send to email</button>
 
                 @if (adviceDictionary.ContainsKey(result))
                 {
@@ -50,6 +45,9 @@ else
     [Inject]
     private IChatGptService ChatGptService { get; set; }
 
+    [Inject]
+    private IEmailService EmailService { get; set; }
+
     private List<AnalysisResultResult> analysisResults;
     private Dictionary<AnalysisResultResult, string> adviceDictionary;
 
@@ -68,43 +66,26 @@ else
         }
     }
 
-    private async Task ExportToPdf(AnalysisResultResult analysisResult)
+    private async Task SendToEmail(AnalysisResultResult analysisResult)
     {
-        var pdf = new PdfDocument();
-        var page = pdf.AddPage();
-        var graphics = XGraphics.FromPdfPage(page);
+        string advice = "";
+        adviceDictionary.TryGetValue(analysisResult, out advice);
 
-        XFont titleFont = new XFont("Arial", 18, XFontStyle.Bold);
-        XFont regularFont = new XFont("Arial", 12, XFontStyle.Regular);
-        XBrush brush = XBrushes.Black;
+        var analysisResultDto = new AnalysisResultResultDto
+            {
+                AiAdvice = advice,
+                AnalysisName = analysisResult.AnalysisName,
+                AnalysisReceptionPointName = analysisResult.AnalysisReceptionPointName,
+                AnalysisValues = analysisResult.AnalysisValues,
+                Id = analysisResult.Id,
+                LaboratoryAssistantName = analysisResult.LaboratoryAssistantName,
+                NurseName = analysisResult.NurseName,
+                PatientName = analysisResult.PatientName,
+                RegistrarName = analysisResult.PatientName,
+                Time = analysisResult.Time,
+            };
 
-        int y = 30;
-        graphics.DrawString("Analysis Result", titleFont, brush, new XPoint(30, y));
-        y += 30;
-
-        graphics.DrawString("Patient Name:", regularFont, brush, new XPoint(30, y));
-        graphics.DrawString(analysisResult.PatientName ?? "", regularFont, brush, new XPoint(150, y));
-        y += 20;
-
-        graphics.DrawString("Laboratory Assistant Name:", regularFont, brush, new XPoint(30, y));
-        graphics.DrawString(analysisResult.LaboratoryAssistantName ?? "", regularFont, brush, new XPoint(250, y));
-        y += 20;
-
-        // Add other fields with null checks
-
-        // Save the PDF to a memory stream
-        using (var memoryStream = new MemoryStream())
-        {
-            pdf.Save(memoryStream);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-
-            // Open the PDF in a new window/tab
-            var pdfData = memoryStream.ToArray();
-            var pdfBase64 = Convert.ToBase64String(pdfData);
-            var pdfUrl = $"data:application/pdf;base64,{pdfBase64}";
-
-            await JSRuntime.InvokeVoidAsync("open", pdfUrl, "_blank");
-        }
+        await EmailService.SendEmail(analysisResultDto);
     }
 
 }
