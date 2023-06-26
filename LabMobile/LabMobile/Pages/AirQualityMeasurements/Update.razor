@@ -43,9 +43,17 @@ else
             <input type="number" step="0.01" class="form-control" id="iaq" name="iaq" @bind="measurement.Iaq" />
         </div>
         <div class="form-group">
+            <label for="iaqLevel">IAQ Level:</label>
+            <input type="text" class="form-control" id="iaqLevel" name="iaqLevel" @bind="measurement.IaqLevel" />
+        </div>
+        <div class="form-group">
+            <label for="season">Season:</label>
+            <input type="text" class="form-control" id="season" name="season" @bind="measurement.Season" />
+        </div>
+        <div class="form-group">
             <label for="isNormal">Is Normal:</label>
             <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="isNormal" @onchange="@((args) => measurement.IsNormal = (bool)args.Value)" />
+                <input type="checkbox" class="custom-control-input" id="isNormal" @bind="measurement.IsNormal" />
                 <label class="custom-control-label" for="isNormal"></label>
             </div>
         </div>
@@ -90,6 +98,8 @@ else
                 Humidity = measurement.Humidity,
                 Co2Equivalent = measurement.Co2Equivalent,
                 Iaq = measurement.Iaq,
+                IaqLevel = measurement.IaqLevel,
+                Season = measurement.Season,
                 IsNormal = measurement.IsNormal
             });
 
@@ -102,4 +112,4 @@ else
             // show error message if update failed
         }
     }
-    }
+}

@@ -61,6 +61,8 @@ namespace LabMobile.Services
 
         public async Task<bool> CreateAirQualityMeasurementAsync(AirQualityMeasurement measurement)
         {
+            measurement.Date = DateTime.SpecifyKind(measurement.Date, DateTimeKind.Utc);
+
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var json = JsonConvert.SerializeObject(measurement);
@@ -71,6 +73,8 @@ namespace LabMobile.Services
 
         public async Task<bool> UpdateAirQualityMeasurementAsync(AirQualityMeasurement measurement)
         {
+            measurement.Date = DateTime.SpecifyKind(measurement.Date, DateTimeKind.Utc);
+
             var accessToken = await SecureStorage.GetAsync("AccessToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var url = $"{BaseUrl}/{measurement.Id}";

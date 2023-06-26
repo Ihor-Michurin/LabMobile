@@ -28,19 +28,31 @@
     <input type="number" class="form-control" id="humidity" @bind="@AirQualityMeasurement.Humidity" />
 </div>
 <div class="form-group">
-    <label for="gas">Gas:</label>
-    <input type="number" class="form-control" id="gas" @bind="@AirQualityMeasurement.Co2Equivalent" />
-</div>
-<div class="form-group">
     <label for="iaq">IAQ:</label>
     <input type="number" class="form-control" id="iaq" @bind="@AirQualityMeasurement.Iaq" />
 </div>
 <div class="form-group">
+    <label for="co2Equivalent">CO2 Equivalent:</label>
+    <input type="number" class="form-control" id="co2Equivalent" @bind="@AirQualityMeasurement.Co2Equivalent" />
+</div>
+<div class="form-group">
+    <label for="breathVocEquivalent">Breath VOC Equivalent:</label>
+    <input type="number" class="form-control" id="breathVocEquivalent" @bind="@AirQualityMeasurement.BreathVocEquivalent" />
+</div>
+<div class="form-group">
     <label for="isNormal">Is Normal:</label>
     <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" id="isNormal" @onchange="@((args) => AirQualityMeasurement.IsNormal = (bool)args.Value)" />
+        <input type="checkbox" class="custom-control-input" id="isNormal" @bind="@AirQualityMeasurement.IsNormal" />
         <label class="custom-control-label" for="isNormal"></label>
     </div>
+</div>
+<div class="form-group">
+    <label for="iaqLevel">IAQ Level:</label>
+    <input type="text" class="form-control" id="iaqLevel" @bind="@AirQualityMeasurement.IaqLevel" />
+</div>
+<div class="form-group">
+    <label for="season">Season:</label>
+    <input type="text" class="form-control" id="season" @bind="@AirQualityMeasurement.Season" />
 </div>
 <button type="submit" class="btn btn-primary" @onclick="@CreateAirQualityMeasurementAsync">Create</button>
 

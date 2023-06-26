@@ -23,9 +23,9 @@ else
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Code</th>
+                <th>Duration</th>
                 <th>Price</th>
-                <th>Method</th>
+                <th>Description</th>
                 <th>Values</th>
                 <th>Actions</th>
             </tr>
@@ -35,7 +35,9 @@ else
             {
                 <tr>
                     <td>@analysis.Name</td>
+                    <td>@analysis.Duration</td>
                     <td>@analysis.Price</td>
+                    <td>@analysis.Description</td>
                     <td>@analysis.AnalysisValues</td>
                     <td>
                         <button @onclick="() => EditAnalysis(analysis)">Edit</button>
